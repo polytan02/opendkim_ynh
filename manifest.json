@@ -1,5 +1,5 @@
 {
-    "name": "OpenDKIM for YunoHost",
+    "name": "OpenDKIM",
     "id": "opendkim",
     "description": {
         "en": "OpenDKIM for YunoHost."

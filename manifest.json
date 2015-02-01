@@ -1,0 +1,25 @@
+{
+    "name": "OpenDKIM for YunoHost",
+    "id": "opendkim",
+    "description": {
+        "en": "OpenDKIM for YunoHost."
+    },
+    "licence": "GPL-2",
+    "developer": {
+        "name": "Polytan02",
+        "email": "polytan02@mcgva.org"
+    },
+    "multi_instance": "true",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for OpenDKIM",
+					"fr": "Choisissez un domaine pour OpenDKIM"
+                },
+                "example": "example.com"
+            }
+        ]
+    }
+}

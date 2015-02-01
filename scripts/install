@@ -19,15 +19,20 @@ domain=$1
 
 # Installation of base apps
 sudo apt-get update
-sudo apt-get install opendkim opendkim-tools
+sudo apt-get -y install opendkim opendkim-tools
 
 # Connecting the opendkim milter to postfix
-sudo cat ../conf/etc_default_opendkim >> /etc/default/opendkim
+sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
 
 # Configure postfix to use this milter 
-sudo cat ../conf/etc_postfix_main.cf >> /etc/postfix/main.cf
+postfix=/etc/postfix/main.cf
+sudo sed -i "\$a# Opendkim" $postfix 
+sudo sed -i "\$amilter_default_action = accept" $postfix 
+sudo sed -i "\$asmtpd_milters = inet:127.0.0.1:8891" $postfix 
+sudo sed -i "\$anon_smtpd_milters = inet:127.0.0.1:8891" $postfix 
 
 # Configuration of opendkim 
+sudo rm /etc/opendkim.conf
 sudo cp -a ../conf/opendkim.conf /etc/
 sudo mkdir -pv /etc/opendkim/keys/$domain
 

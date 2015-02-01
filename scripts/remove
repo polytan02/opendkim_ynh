@@ -8,16 +8,16 @@ domain=$(sudo yunohost app setting $app domain)
 # is_public=$(sudo yunohost app setting $app is_public)
 
 # Remove software and conf files
-sudo apt-get remove opendkim opendkim-tools
+sudo apt-get -y remove opendkim opendkim-tools
 sudo rm -rf /etc/opendkim*
 sudo rm -rf /etc/default/opendkim
 
 # Removal of the milter in postfix main.cf (unknown at this stage)
 postfix=/etc/postfix/main.cf
-sed -i '/# Opendkim/d' $postfix 
-sed -i '/milter_default_action = accept/d' $postfix 
-sed -i '/smtpd_milters = inet:127.0.0.1:8891/d' $postfix 
-sed -i '/non_smtpd_milters = inet:127.0.0.1:8891/d' $postfix 
+sudo sed -i '/# Opendkim/d' $postfix 
+sudo sed -i '/milter_default_action = accept/d' $postfix 
+sudo sed -i '/smtpd_milters = inet:127.0.0.1:8891/d' $postfix 
+sudo sed -i '/non_smtpd_milters = inet:127.0.0.1:8891/d' $postfix 
 
 # Restart services
 sudo service postfix reload

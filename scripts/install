@@ -1,5 +1,5 @@
 #!/bin/bash
-app=OpenDKIM
+app=opendkim
 
 # Retrieve arguments
 domain=$1
@@ -12,10 +12,10 @@ domain=$1
 #sudo yunohost app setting $app is_public -v "$is_public"
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain -a $app
-if [[ ! $? -eq 0 ]]; then
-    exit 1
-fi
+#sudo yunohost app checkurl $domain -a $app
+#if [[ ! $? -eq 0 ]]; then
+#    exit 1
+#fi
 
 # Installation of base apps
 sudo apt-get update

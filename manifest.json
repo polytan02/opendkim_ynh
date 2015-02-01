@@ -2,7 +2,7 @@
     "name": "OpenDKIM",
     "id": "opendkim",
     "description": {
-        "en": "OpenDKIM for YunoHost."
+        "en": "OpenDKIM for YunoHost.",
 		"fr": "OpenDKIM pour YunoHost."
     },
     "licence": "GPL-2",

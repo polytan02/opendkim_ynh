@@ -26,11 +26,11 @@ sudo mkdir -pv /etc/opendkim/keys/$domain
 
 # Connecting the opendkim milter to postfix
 # sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
-sudo cat ./conf/etc_default_opendkim | sudo tee -a /etc/default/opendkim
+sudo cat ../conf/etc_default_opendkim | sudo tee -a /etc/default/opendkim
 
 # Configure postfix to use this milter
 postfix=/etc/postfix/main.cf
-sudo cat ./conf/etc_postfix_main.cf | sudo tee -a $postfix
+sudo cat ../conf/etc_postfix_main.cf | sudo tee -a $postfix
 
 
 # Trusted Hosts

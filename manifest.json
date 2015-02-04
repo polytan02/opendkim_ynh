@@ -16,11 +16,37 @@
             {
                 "name": "domain",
                 "ask": {
-                    "en": "Choose a domain for OpenDKIM",
-					"fr": "Choisissez un domaine pour OpenDKIM"
+        	        "en": "Choose a domain for OpenDKIM",
+			"fr": "Choisissez un domaine pour OpenDKIM"
                 },
-                "example": "example.com"
+                "example": "example.com",
             }
+		
+	   {
+		"name": "path",
+		"ask" {
+			"en": "Choose a path for the web page displaying the DKIM key to put in your DNS",
+			"fr": "Indiquez une adresse pour afficher la clé DKIM à insérer dans votre zone DNS"
+		},
+		"example": "OpenDKIM",
+	   }
+	   {
+		"name": "admin",
+                "ask": {
+                    "en": "Choose an admin user"
+                    "fr": "Indiquez un admin pour cette page"
+                },
+                "example": "johndoe"
+	   }
+	   {
+		"name": "is_public"
+                "ask": {
+                    "en": "Is it a public application ?"
+                    "fr": "Est-ce une page publique ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "No"
+	   }
         ]
     }
 }

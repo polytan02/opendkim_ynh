@@ -63,7 +63,6 @@ sudo cat ../conf/index.html_bottom | sudo tee -a $final_path/index.html
 
 # Set permissions
 sudo chmod 775 -R $final_path
-sudo chown -hR $user:www-data $final_path
 sudo chown -hR www-data:www-data $final_path
 
 

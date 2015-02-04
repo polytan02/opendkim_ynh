@@ -21,12 +21,10 @@ fi
 sudo apt-get update
 sudo apt-get -y install opendkim opendkim-tools
 
-opendkim=/etc/opendkim
-
 # Configuration of opendkim
 sudo rm -v /etc/opendkim.conf
 sudo cp -v ../conf/opendkim.conf /etc/
-sudo mkdir -pv $dest/keys/$domain
+sudo mkdir -pv /etc/opendkim/keys/$domain
 
 # Connecting the opendkim milter to postfix
 # sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
@@ -39,26 +37,26 @@ sudo cat ../conf/etc_postfix_main.cf | sudo tee -a $postfix
 
 # Trusted Hosts
 sudo cp -v ../conf/TrustedHosts /etc/opendkim/
-sudo echo "*.$domain" | sudo tee -a $dest/TrustedHosts
+sudo echo "*.$domain" | sudo tee -a /etc/opendkim/TrustedHosts
 
 # Create a key table
 
-sudo echo "mail._domainkey.$domain $domain:mail:/etc/opendkim/keys/$domain/mail.private" | sudo tee -a  $dest/KeyTable
+sudo echo "mail._domainkey.$domain $domain:mail:/etc/opendkim/keys/$domain/mail.private" | sudo tee -a  /etc/opendkim/KeyTable
 
 # Creation of a signing table
-sudo echo "*@$domain mail._domainkey.$domain" | sudo tee -a $dest/SigningTable
+sudo echo "*@$domain mail._domainkey.$domain" | sudo tee -a /etc/opendkim/SigningTable
 
 # Generation of keys
 sudo opendkim-genkey -D /etc/opendkim/keys/$domain/ -s mail -d $domain
 
 # Right parameters to the files created
-sudo chown -Rv opendkim:opendkim $dest*
+sudo chown -Rv opendkim:opendkim /etc/opendkim*
 
 # We copy the key and let it be accessible via a web page
 final_path=/var/www/$app
 sudo mkdir -p $final_path
 sudo cat ../conf/index.html_top | sudo tee -a $final_path/index.html
-sudo cat $dest/keys/$domain/mail.txt | sudo tee -a $final_path/index.html
+sudo cat /etc/opendkim/keys/$domain/mail.txt | sudo tee -a $final_path/index.html
 sudo cat ../conf/index.html_bottom | sudo tee -a $final_path/index.html
 
 # Set permissions

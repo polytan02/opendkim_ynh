@@ -20,8 +20,7 @@
 			"fr": "Choisissez un domaine pour OpenDKIM"
                 },
                 "example": "example.com"
-            }
-		
+            },
 	   {
 		"name": "path",
 		"ask": {
@@ -29,7 +28,7 @@
 			"fr": "Indiquez une adresse pour afficher la clé DKIM à insérer dans votre zone DNS"
 		},
 		"example": "OpenDKIM"
-	   }
+	   },
 	   {
 		"name": "admin",
                 "ask": {
@@ -37,7 +36,7 @@
                     "fr": "Indiquez un admin pour cette page"
                 },
                 "example": "johndoe"
-	   }
+	   },
 	   {
 		"name": "is_public",
                 "ask": {

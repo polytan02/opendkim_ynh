@@ -7,6 +7,9 @@ path=$2
 admin=$3
 is_public=$4
 
+final_path=/var/www/$app
+postfix=/etc/postfix/main.cf
+
 # Save app settings
 sudo yunohost app setting $app admin -v "$admin"
 sudo yunohost app setting $app is_public -v "$is_public"
@@ -31,7 +34,6 @@ sudo mkdir -pv /etc/opendkim/keys/$domain
 sudo cat ../conf/etc_default_opendkim | sudo tee -a /etc/default/opendkim
 
 # Configure postfix to use this milter
-postfix=/etc/postfix/main.cf
 sudo cat ../conf/etc_postfix_main.cf | sudo tee -a $postfix
 
 
@@ -53,7 +55,6 @@ sudo opendkim-genkey -D /etc/opendkim/keys/$domain/ -s mail -d $domain
 sudo chown -Rv opendkim:opendkim /etc/opendkim*
 
 # We copy the key and let it be accessible via a web page
-final_path=/var/www/$app
 sudo mkdir -p $final_path
 sudo cat ../conf/index.html_top | sudo tee -a $final_path/index.html
 sudo cat /etc/opendkim/keys/$domain/mail.txt | sudo tee -a $final_path/index.html

@@ -5,6 +5,7 @@ app=opendkim
 domain=$(sudo yunohost app setting $app domain)
 path=$(sudo yunohost app setting $app path)
 is_public=$(sudo yunohost app setting $app is_public)
+
 final_path=/var/www/$path
 
 
@@ -19,8 +20,7 @@ sudo apt-get -y remove opendkim opendkim-tools
 sudo rm -rf /etc/opendkim*
 
 # Cleaning of /etc/default/opendkim
-#sed -i '/SOCKET=\"inet:8891@localhost\"/d' /etc/default/opendkim
-sudo rm /etc/default/opendkim
+sudo sed -i '/SOCKET=\"inet:8891@localhost\"/d' /etc/default/opendkim
 
 # Removal of the milter in postfix main.cf (unknown at this stage)
 postfix=/etc/postfix/main.cf

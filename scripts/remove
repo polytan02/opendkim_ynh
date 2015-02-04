@@ -18,17 +18,16 @@ sudo rm -f /etc/nginx/conf.d/$domain.d/$name.conf
 sudo apt-get -y remove opendkim opendkim-tools
 sudo rm -rf /etc/opendkim*
 
-
 # Cleaning of /etc/default/opendkim
-sed -i "s/SOCKET=\"inet:8891@localhost\"//g" /etc/default/opendkim
+sed -i "/SOCKET=\"inet:8891@localhost\"/d" /etc/default/opendkim
 
 # Removal of the milter in postfix main.cf (unknown at this stage)
 postfix=/etc/postfix/main.cf
-sed -i "s/# Opendkim milter configuration//g" /etc/postfix/main.cf
-sed -i "s/milter_protocol = 2//g" /etc/postfix/main.cf
-sed -i "s/milter_default_action = accept//g" /etc/postfix/main.cf
-sed -i "s/smtpd_milters = inet:127.0.0.1:8891//g" /etc/postfix/main.cf
-sed -i "s/non_smtpd_milters = inet:127.0.0.1:8891//g" /etc/postfix/main.cf
+sed -i "/# Opendkim milter configuration/d" /etc/postfix/main.cf
+sed -i "/milter_protocol = 2//g" /etc/postfix/main.cf
+sed -i "/milter_default_action = accept/d" /etc/postfix/main.cf
+sed -i "/smtpd_milters = inet:127.0.0.1:8891/d" /etc/postfix/main.cf
+sed -i "/non_smtpd_milters = inet:127.0.0.1:8891/d" /etc/postfix/main.cf
 
 # Restart services
 sudo service postfix reload

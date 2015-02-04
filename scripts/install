@@ -63,11 +63,10 @@ sudo cat ../conf/index.html_bottom | sudo tee -a $final_path/index.html
 sudo chmod 775 -R $final_path
 sudo chown -hR www-data:www-data $final_path
 
-
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$name.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
 
 # Restart services

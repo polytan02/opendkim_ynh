@@ -24,7 +24,7 @@
 		
 	   {
 		"name": "path",
-		"ask" {
+		"ask": {
 			"en": "Choose a path for the web page displaying the DKIM key to put in your DNS",
 			"fr": "Indiquez une adresse pour afficher la clé DKIM à insérer dans votre zone DNS"
 		},

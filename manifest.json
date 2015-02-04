@@ -1,5 +1,5 @@
 {
-    "name": "OpenDKIM",
+    "name": "opendkim",
     "id": "opendkim",
     "description": {
 		"en": "OpenDKIM for YunoHost.",
@@ -27,8 +27,8 @@
 			"en": "Choose a path for the web page displaying the DKIM key to put in your DNS",
 			"fr": "Indiquez une adresse pour afficher la clé DKIM à insérer dans votre zone DNS"
 		},
-		"example": "/OpenDKIM",
-		"default": "/OpenDKIM"
+		"example": "/opendkim",
+		"default": "/opendkim"
 	   },
 	   {
 		"name": "admin",

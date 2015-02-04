@@ -5,6 +5,14 @@ app=opendkim
 domain=$(sudo yunohost app setting $app domain)
 path=$(sudo yunohost app setting $app path)
 is_public=$(sudo yunohost app setting $app is_public)
+final_path=/var/www/$path
+
+
+# Removal of web page
+sudo rm -rf $final_path
+
+# Suppression de la config nginx de la webapp
+sudo rm -f /etc/nginx/conf.d/$domain.d/$name.conf
 
 # Remove software and conf files
 sudo apt-get -y remove opendkim opendkim-tools
@@ -24,4 +32,5 @@ sed -i "s/non_smtpd_milters = inet:127.0.0.1:8891//g" /etc/postfix/main.cf
 
 # Restart services
 sudo service postfix reload
+sudo service nginx reload
 sudo yunohost app ssowatconf

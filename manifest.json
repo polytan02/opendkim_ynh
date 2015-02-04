@@ -33,15 +33,15 @@
 	   {
 		"name": "admin",
                 "ask": {
-                    "en": "Choose an admin user"
+                    "en": "Choose an admin user",
                     "fr": "Indiquez un admin pour cette page"
                 },
                 "example": "johndoe"
 	   }
 	   {
-		"name": "is_public"
+		"name": "is_public",
                 "ask": {
-                    "en": "Is it a public application ?"
+                    "en": "Is it a public application ?",
                     "fr": "Est-ce une page publique ?"
                 },
                 "choices": ["Yes", "No"],

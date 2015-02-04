@@ -3,53 +3,57 @@ app=opendkim
 
 # Retrieve arguments
 domain=$1
-#path=$2
+path=$2
 #admin=$3
-#is_public=$4
+is_public=$4
 
 # Save app settings
 #sudo yunohost app setting $app admin -v "$admin"
-#sudo yunohost app setting $app is_public -v "$is_public"
+sudo yunohost app setting $app is_public -v "$is_public"
 
 # Check domain/path availability
-#sudo yunohost app checkurl $domain -a $app
-#if [[ ! $? -eq 0 ]]; then
-#    exit 1
-#fi
+sudo yunohost app checkurl $domain -a $app
+if [[ ! $? -eq 0 ]]; then
+    exit 1
+fi
 
 # Installation of base apps
 sudo apt-get update
 sudo apt-get -y install opendkim opendkim-tools
 
-# Connecting the opendkim milter to postfix
-sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
-
-# Configure postfix to use this milter 
-postfix=/etc/postfix/main.cf
-sudo sed -i "\$a# Opendkim" $postfix 
-sudo sed -i "\$amilter_default_action = accept" $postfix 
-sudo sed -i "\$asmtpd_milters = inet:127.0.0.1:8891" $postfix 
-sudo sed -i "\$anon_smtpd_milters = inet:127.0.0.1:8891" $postfix 
-
-# Configuration of opendkim 
-sudo rm /etc/opendkim.conf
-sudo cp -a ../conf/opendkim.conf /etc/
+# Configuration of opendkim
+sudo rm -v /etc/opendkim.conf
+sudo cp -v ../conf/opendkim.conf /etc/
 sudo mkdir -pv /etc/opendkim/keys/$domain
 
+# Connecting the opendkim milter to postfix
+# sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
+sudo cat ./conf/etc_default_opendkim >> /etc/default/opendkim
+
+# Configure postfix to use this milter
+postfix=/etc/postfix/main.cf
+#sudo sed -i "\$a# Opendkim" $postfix
+#sudo sed -i "\$amilter_default_action = accept" $postfix
+#sudo sed -i "\$asmtpd_milters = inet:127.0.0.1:8891" $postfix
+#sudo sed -i "\$anon_smtpd_milters = inet:127.0.0.1:8891" $postfix
+sudo cat ./conf/etc_postfix_main.cf >> $postfix
+
+
 # Trusted Hosts
-sudo cp -a ../conf/TrustedHosts /etc/opendkim/
-sudo echo "*.$domain" > /etc/opendkim/TrustedHosts
+sudo cp -v ../conf/TrustedHosts /etc/opendkim/
+sudo echo "*.$domain" >> /etc/opendkim/TrustedHosts
 
 # Create a key table
-sudo echo "mail._domainkey.$domain $domain:mail:/etc/opendkim/keys/$domain/mail.private" > /etc/opendkim/KeyTable
+
+sudo echo "mail._domainkey.$domain $domain:mail:/etc/opendkim/keys/$domain/mail.private" >> /etc/opendkim/KeyTable
 
 # Creation of a signing table
-sudo echo "*@$domain mail._domainkey.$domain" > /etc/opendkim/SigningTable
+sudo echo "*@$domain mail._domainkey.$domain" >> /etc/opendkim/SigningTable
 
 # Generation of keys
 sudo opendkim-genkey -D /etc/opendkim/keys/$domain/ -s mail -d $domain
 
-# Right parameters to the files created 
+# Right parameters to the files created
 sudo chown -Rv opendkim:opendkim /etc/opendkim*
 
 # Restart services

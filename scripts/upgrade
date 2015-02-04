@@ -1,0 +1,85 @@
+#!/bin/bash
+app=opendkim
+
+# Retrieve arguments
+domain=$(sudo yunohost app setting $app domain)
+path=$(sudo yunohost app setting $app path)
+admin=$(sudo yunohost app setting $app admin)
+is_public=$(sudo yunohost app setting $app is_public)
+
+# Remove trailing "/" for next commands
+path=${path%/}
+
+final_path=/var/www/$app
+postfix=/etc/postfix/main.cf
+
+# Save app settings
+sudo yunohost app setting $app admin -v "$admin"
+sudo yunohost app setting $app is_public -v "$is_public"
+
+# Installation of base apps
+sudo apt-get update
+sudo apt-get -y remove opendkim opendkim-tools
+sudo apt-get -y install opendkim opendkim-tools
+
+# Configuration of opendkim
+sudo rm -v /etc/opendkim.conf
+sudo cp -v ../conf/opendkim.conf /etc/
+sudo mkdir -pv /etc/opendkim/keys/$domain
+
+# Connecting the opendkim milter to postfix
+# sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
+sudo rm /etc/default/opendkim
+sudo cat ../conf/etc_default_opendkim | sudo tee -a /etc/default/opendkim
+
+# Configure postfix to use this milter
+sudo sed -i '/# Opendkim milter configuration/d' /etc/postfix/main.cf
+sudo sed -i '/milter_protocol = 2/d' /etc/postfix/main.cf
+sudo sed -i '/milter_default_action = accept/d' /etc/postfix/main.cf
+sudo sed -i '/smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
+sudo sed -i '/non_smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
+
+sudo cat ../conf/etc_postfix_main.cf | sudo tee -a $postfix
+
+
+# Trusted Hosts
+sudo rm /etc/opendkim/TrustedHosts
+sudo cp -v ../conf/TrustedHosts /etc/opendkim/
+sudo echo "*.$domain" | sudo tee -a /etc/opendkim/TrustedHosts
+
+# Create a key table
+sudo rm /etc/opendkim/KeyTable
+sudo echo "mail._domainkey.$domain $domain:mail:/etc/opendkim/keys/$domain/mail.private" | sudo tee -a  /etc/opendkim/KeyTable
+
+# Creation of a signing table
+sudo rm /etc/opendkim/SigningTable
+sudo echo "*@$domain mail._domainkey.$domain" | sudo tee -a /etc/opendkim/SigningTable
+
+# Generation of keys
+#sudo opendkim-genkey -D /etc/opendkim/keys/$domain/ -s mail -d $domain
+
+# Right parameters to the files created
+sudo chown -Rv opendkim:opendkim /etc/opendkim*
+
+# We copy the key and let it be accessible via a web page
+sudo rm -rf $final_path
+sudo mkdir -p $final_path
+sudo cat ../conf/index.html_top | sudo tee -a $final_path/index.html
+sudo cat /etc/opendkim/keys/$domain/mail.txt | sudo tee -a $final_path/index.html
+sudo cat ../conf/index.html_bottom | sudo tee -a $final_path/index.html
+
+# Set permissions
+sudo chmod 775 -R $final_path
+sudo chown -hR www-data:www-data $final_path
+
+# Modify Nginx configuration file and copy it to Nginx conf directory
+sudo sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
+sudo sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
+sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
+
+
+# Restart services
+sudo service opendkim restart
+sudo service postfix reload
+sudo yunohost app ssowatconf

@@ -24,11 +24,11 @@ sudo rm /etc/default/opendkim
 
 # Removal of the milter in postfix main.cf (unknown at this stage)
 postfix=/etc/postfix/main.cf
-sed -i '/# Opendkim milter configuration/d' /etc/postfix/main.cf
-sed -i '/milter_protocol = 2/d' /etc/postfix/main.cf
-sed -i '/milter_default_action = accept/d' /etc/postfix/main.cf
-sed -i '/smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
-sed -i '/non_smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
+sudo sed -i '/# Opendkim milter configuration/d' /etc/postfix/main.cf
+sudo sed -i '/milter_protocol = 2/d' /etc/postfix/main.cf
+sudo sed -i '/milter_default_action = accept/d' /etc/postfix/main.cf
+sudo sed -i '/smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
+sudo sed -i '/non_smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
 
 # Restart services
 sudo service postfix reload

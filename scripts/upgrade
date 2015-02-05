@@ -23,13 +23,15 @@ sudo apt-get -y remove opendkim opendkim-tools
 sudo apt-get -y install opendkim opendkim-tools
 
 # Configuration of opendkim
-sudo rm -v /etc/opendkim.conf
-sudo cp -v ../conf/opendkim.conf /etc/
+sudo mkdir /tmp/dkim_4242
+sudo cp -a /etc/opendkim/keys/ /tmp/dkim_4242/
+sudo rm -rf /etc/opendkim*
 sudo mkdir -pv /etc/opendkim/keys/$domain
+sudo cp -v ../conf/opendkim.conf /etc/
+sudo cp -a /tmp/dkim_4242/keys/* /etc/opendkim/keys/
+sudo rm -rf /tmp/dkim_4242/
 
 # Connecting the opendkim milter to postfix
-# sudo sed -i "\$aSOCKET=\"inet:8891@localhost\"" /etc/default/opendkim
-sudo rm /etc/default/opendkim
 sudo cat ../conf/etc_default_opendkim | sudo tee -a /etc/default/opendkim
 
 # Configure postfix to use this milter
@@ -43,19 +45,16 @@ sudo cat ../conf/etc_postfix_main.cf | sudo tee -a $postfix
 
 
 # Trusted Hosts
-sudo rm /etc/opendkim/TrustedHosts
 sudo cp -v ../conf/TrustedHosts /etc/opendkim/
 sudo echo "*.$domain" | sudo tee -a /etc/opendkim/TrustedHosts
 
 # Create a key table
-sudo rm /etc/opendkim/KeyTable
 sudo echo "mail._domainkey.$domain $domain:mail:/etc/opendkim/keys/$domain/mail.private" | sudo tee -a  /etc/opendkim/KeyTable
 
 # Creation of a signing table
-sudo rm /etc/opendkim/SigningTable
 sudo echo "*@$domain mail._domainkey.$domain" | sudo tee -a /etc/opendkim/SigningTable
 
-# Generation of keys
+# Generation of keys - no, we have kept the old ones
 #sudo opendkim-genkey -D /etc/opendkim/keys/$domain/ -s mail -d $domain
 
 # Right parameters to the files created

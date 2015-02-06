@@ -81,4 +81,6 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 # Restart services
 sudo service opendkim restart
 sudo service postfix reload
+sudo service php5-fpm reload
+sudo serfice nginx reload
 sudo yunohost app ssowatconf

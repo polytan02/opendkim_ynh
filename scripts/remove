@@ -32,5 +32,6 @@ sudo sed -i '/non_smtpd_milters = inet:127.0.0.1:8891/d' /etc/postfix/main.cf
 
 # Restart services
 sudo service postfix reload
-sudo service nginx reload
+sudo service php5-fpm reload
+sudo serfice nginx reload
 sudo yunohost app ssowatconf

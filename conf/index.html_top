@@ -1,15 +1,22 @@
-</p>
-        <h2>SPF Key to place in your DNS</h2>
-        <p class="lead">
-DOMAIN.TLD 300 TXT "v=spf1 a:DOMAIN.TLD mx ?all"
-</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OpenDKIM and SPF</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+   <div class="container">
+      <div class="header">
+        <h1 class="text-muted">OpenDKIM and SPF</h3><br><br>
       </div>
 
-    </div>
+    <div class="container">
 
-
-    <script src="js/jquery.min.1.11.2.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-	
-	</body>
-</html>
+      <div class="starter-template">
+        <h2>DKIM Key to place in your DNS</h2>
+        <p class="lead">

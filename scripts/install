@@ -56,9 +56,11 @@ sudo chown -Rv opendkim:opendkim /etc/opendkim*
 
 # We copy the key and let it be accessible via a web page
 sudo mkdir -p $final_path
+sudo cp -av ../sources/* $final_path/
 sudo cat ../conf/index.html_top | sudo tee -a $final_path/index.html
 sudo cat /etc/opendkim/keys/$domain/mail.txt | sudo tee -a $final_path/index.html
 sudo cat ../conf/index.html_bottom | sudo tee -a $final_path/index.html
+sudo sed -i "s/DOMAIN.TLD/$domain/g" $final_path/index.html
 
 # Set permissions
 sudo chmod 775 -R $final_path

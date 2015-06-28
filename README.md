@@ -12,7 +12,7 @@ A webpage will be generated so that you can see what DKIM key to place in your D
 
 Two keys needs to be added (please change DOMAIN.TLD by your own domain name) : 
 - SPF key : 
-DOMAIN.TLD 300 TXT "v=spf1 a:DOMAIN.TLD ip4:<IPv4> ip6:<IPv6> mx ?all"
+DOMAIN.TLD 300 TXT "v=spf1 a:DOMAIN.TLD ip4:Server'sIPv4 ip6:Server'sIPv6 mx ?all"
 
 - DKIM key :
 cat /etc/opendkim/keys/DOMAIN.TLD/mail.txt

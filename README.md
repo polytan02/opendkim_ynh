@@ -2,6 +2,11 @@
 
 * [OpenDKIM](http://www.opendkim.org/)
 
+
+DEPRECATED APP. DO NOT USE.
+NATIVELY INTEGRATED WITHIN LATEST YUNOHOST RELEASE.
+
+
 This is a WIP to automate OpenDKIM for Yunohost
 
 At this stage, it will eventually work only for a SINGLE domain.
